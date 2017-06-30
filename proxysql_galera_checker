@@ -60,13 +60,7 @@ fi
 
 proxysql_exec() {
   local query="$1"
-  printf "%s\n" \
-      "[client]" \
-      "user=${PROXYSQL_USERNAME}" \
-      "password=${PROXYSQL_PASSWORD}" \
-      "host=${PROXYSQL_HOSTNAME}" \
-      "port=${PROXYSQL_PORT}"  \
-      | mysql --defaults-file=/dev/stdin --protocol=tcp -Nse "${query}"
+  mysql -u ${PROXYSQL_USERNAME}" -p${PROXYSQL_PASSWORD}" -h ${PROXYSQL_HOSTNAME} -P ${PROXYSQL_PORT} --protocol=tcp -Nse "${query}"
 }
 
 #Timeout exists for instances where mysqld may be hung
@@ -74,13 +68,7 @@ TIMEOUT=10
 
 mysql_exec() {
   local query="$1"
-  printf "%s\n" \
-      "[client]" \
-      "user=${MYSQL_USERNAME}" \
-      "password=${MYSQL_PASSWORD}" \
-      "host=${server}" \
-      "port=${port}"  \
-      | timeout $TIMEOUT mysql --defaults-file=/dev/stdin --protocol=tcp -nNE -e "${query}"
+  timeout ${TIMEOUT} mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} -h ${server} -P ${port} --protocol=tcp -nNE -e "${query}"
 }
 
 if [ "$1" = '-h' -o "$1" = '--help'  -o -z "$1" ]

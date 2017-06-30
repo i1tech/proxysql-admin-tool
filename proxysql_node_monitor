@@ -29,14 +29,12 @@ check_cmd(){
 
 proxysql_exec() {
   query=$1
-    printf "[client]\nuser=${PROXYSQL_USERNAME}\npassword=${PROXYSQL_PASSWORD}\nhost=${PROXYSQL_HOSTNAME}\nport=${PROXYSQL_PORT}\n" | \
-      mysql --defaults-file=/dev/stdin --protocol=tcp -Bse "${query}" 2>/dev/null
+    mysql -u ${PROXYSQL_USERNAME} -p"${PROXYSQL_PASSWORD}" -h ${PROXYSQL_HOSTNAME} -P ${PROXYSQL_PORT} --protocol=tcp -Bse "${query}" 2>/dev/null
 }
 
 mysql_exec() {
   query=$1
-  printf "[client]\nuser=${CLUSTER_USERNAME}\npassword=${CLUSTER_PASSWORD}\nhost=${CLUSTER_HOSTNAME}\nport=${CLUSTER_PORT}\n" | \
-      mysql --defaults-file=/dev/stdin --protocol=tcp -Bse "${query}" 2>/dev/null
+  mysql -u ${CLUSTER_USERNAME} -p"${CLUSTER_PASSWORD}" -h ${CLUSTER_HOSTNAME} -P ${CLUSTER_PORT} --protocol=tcp -Bse "${query}" 2>/dev/null
 }
 
 # Update Percona XtraDB Cluster nodes in ProxySQL database
